@@ -1,0 +1,218 @@
+<!doctype html>
+<html lang="es">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Diseñá tu render en 5 minutos — Federico Marzano Pacheco</title>
+<meta name="description" content="Respondé un cuestionario de 5 minutos y recibí un render conceptual de tu casa ideal. Sin costo.">
+<link rel="icon" href="favicon-32.png"><link rel="apple-touch-icon" href="apple-touch-icon.png">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,400;0,9..144,500;1,9..144,400&family=Manrope:wght@400;500;600;700&display=swap" rel="stylesheet">
+<style>
+:root{--cream:#F2EBDD;--cream2:#EAE1CF;--line:#D6CAB2;--ink:#1F2A2A;--text:#3E4B4B;--green:#1E4C4C;--gold:#6E5A2E;--goldl:#E2D3AE}
+*{box-sizing:border-box}
+html{scroll-behavior:smooth}
+body{margin:0;background:var(--cream);color:var(--ink);font:17px/1.6 'Manrope',system-ui,sans-serif;min-height:100vh}
+.bg{position:fixed;inset:0;z-index:-1;background:url(hero-poster.jpg) center/cover;opacity:.5}
+.bg::after{content:"";position:absolute;inset:0;background:rgba(242,235,221,.72)}
+header{position:sticky;top:0;z-index:10;background:rgba(242,235,221,.8);backdrop-filter:blur(14px);-webkit-backdrop-filter:blur(14px);border-bottom:1px solid rgba(31,42,42,.1)}
+.bar{max-width:1240px;margin:0 auto;padding:14px 20px;display:flex;align-items:center;justify-content:space-between;gap:12px}
+.bar a{color:var(--ink);text-decoration:none;font-family:'Fraunces',serif;font-size:20px;font-weight:500;display:flex;align-items:center;gap:10px}
+.bar img{width:38px;height:38px;border-radius:50%}
+.bar small{font-size:14px;color:var(--text)}
+.prog{height:3px;background:rgba(31,42,42,.1)}
+.prog i{display:block;height:100%;width:0;background:var(--green);transition:width .35s}
+main{max-width:1240px;margin:0 auto;padding:36px 20px 80px;display:grid;grid-template-columns:minmax(0,1fr) 420px;gap:24px;align-items:start}
+.view{position:sticky;top:96px;background:rgba(242,235,221,.86);backdrop-filter:blur(16px);-webkit-backdrop-filter:blur(16px);border:1px solid rgba(255,255,255,.6);border-radius:10px;overflow:hidden;box-shadow:0 10px 40px rgba(31,42,42,.08)}
+.view canvas{display:block;width:100%;height:380px;cursor:grab;touch-action:pan-y}
+.view .cap{padding:14px 18px 16px;border-top:1px solid var(--line);font-size:13.5px;color:var(--text)}
+.view .cap b{display:block;color:var(--ink);font-size:15px;margin-bottom:2px}
+.view .tags{display:flex;flex-wrap:wrap;gap:6px;margin-top:8px}
+.view .tags span{background:var(--cream2);border-radius:999px;padding:3px 10px;font-size:12.5px;font-weight:600;color:var(--green)}
+.view .live{position:absolute;left:14px;top:12px;font-size:11.5px;font-weight:700;letter-spacing:.14em;text-transform:uppercase;color:var(--gold);background:rgba(242,235,221,.8);padding:4px 10px;border-radius:999px}
+@media(max-width:960px){main{grid-template-columns:1fr}.view{position:sticky;top:64px;z-index:5;order:-1}.view canvas{height:220px}.view .cap{padding:10px 14px}.view .tags{display:none}}
+.panel{background:rgba(242,235,221,.86);backdrop-filter:blur(16px);-webkit-backdrop-filter:blur(16px);border:1px solid rgba(255,255,255,.6);border-radius:10px;padding:40px 36px;box-shadow:0 10px 40px rgba(31,42,42,.08)}
+.eyebrow{font-size:13px;font-weight:700;letter-spacing:.16em;text-transform:uppercase;color:var(--gold)}
+h1,h2{font-family:'Fraunces',serif;font-weight:400;line-height:1.08;margin:8px 0 10px;letter-spacing:-.01em;text-wrap:balance}
+h1{font-size:clamp(36px,6vw,58px)}h2{font-size:clamp(30px,4.6vw,42px)}
+h1 em,h2 em{color:var(--green)}
+.lead{color:var(--text);margin:0 0 24px;max-width:560px}
+.q{margin:28px 0 0}
+.q>label,.q>.lbl{display:block;font-weight:700;font-size:17px;margin-bottom:4px}
+.hint{font-size:14px;color:var(--text);margin:0 0 10px}
+.opts{display:flex;flex-wrap:wrap;gap:10px}
+.opt{position:relative}
+.opt input{position:absolute;opacity:0;inset:0;width:100%;height:100%;cursor:pointer;margin:0}
+.opt span{display:flex;align-items:center;gap:8px;min-height:46px;padding:10px 18px;border:1.5px solid var(--line);border-radius:999px;background:rgba(255,255,255,.4);font-weight:600;font-size:15px;transition:.15s}
+.opt input:checked+span{background:var(--green);border-color:var(--green);color:var(--cream)}
+.opt input:focus-visible+span{outline:3px solid var(--goldl);outline-offset:2px}
+.opt:hover span{border-color:var(--green)}
+.cards{display:grid;grid-template-columns:repeat(auto-fit,minmax(190px,1fr));gap:12px}
+.card span{border-radius:10px;flex-direction:column;align-items:flex-start;gap:2px;padding:16px;min-height:96px;justify-content:flex-start}
+.card b{font-family:'Fraunces',serif;font-weight:500;font-size:20px}
+.card em{font-style:normal;font-weight:500;font-size:13.5px;opacity:.85}
+.sw{display:flex;gap:4px;margin-bottom:8px}
+.sw i{width:26px;height:26px;border-radius:50%;border:1px solid rgba(0,0,0,.15)}
+input[type=text],input[type=tel],input[type=number],textarea,select{width:100%;font:inherit;padding:13px 16px;border:1.5px solid var(--line);border-radius:8px;background:rgba(255,255,255,.55);color:var(--ink);min-height:48px}
+textarea{min-height:100px;resize:vertical}
+input:focus,textarea:focus,select:focus{outline:3px solid var(--goldl);border-color:var(--green)}
+.row{display:grid;grid-template-columns:repeat(auto-fit,minmax(220px,1fr));gap:16px}
+.step-n{display:flex;gap:6px;flex-wrap:wrap;margin-bottom:18px}
+.step-n i{width:28px;height:4px;border-radius:2px;background:var(--line)}
+.step-n i.on{background:var(--green)}
+.nav{display:flex;justify-content:space-between;align-items:center;gap:12px;margin-top:36px;flex-wrap:wrap}
+.btn{font:inherit;font-weight:700;border-radius:999px;padding:15px 28px;min-height:48px;cursor:pointer;border:1.5px solid var(--green);display:inline-flex;align-items:center;gap:10px;text-decoration:none}
+.btn.p{background:var(--green);color:var(--cream)}.btn.s{background:transparent;color:var(--green)}
+.btn:hover{filter:brightness(1.12)}
+.btn[hidden]{display:none}
+.note{font-size:13.5px;color:var(--text);margin-top:14px}
+.sum{background:var(--cream2);border-radius:8px;padding:22px 24px;margin:22px 0;font-size:15px}
+.sum dl{margin:0;display:grid;grid-template-columns:auto 1fr;gap:6px 18px}
+.sum dt{font-weight:700;color:var(--gold)}.sum dd{margin:0}
+.err{color:#8a2d1e;font-size:14px;margin-top:6px;display:none}
+.check{display:flex;gap:10px;align-items:flex-start;font-size:14.5px;color:var(--text);margin-top:18px}
+.check input{width:20px;height:20px;margin-top:3px;accent-color:var(--green)}
+@media(max-width:560px){.panel{padding:28px 20px}}
+@media(prefers-reduced-motion:reduce){*{transition:none!important;scroll-behavior:auto!important}}
+</style>
+</head>
+<body>
+<div class="bg" aria-hidden="true"></div>
+<header>
+<div class="bar"><a href="index.html"><img src="logo-mp.png" alt="" style="border-radius:0;width:auto;height:40px">Federico Marzano Pacheco</a><small id="stepLbl"></small></div>
+<div class="prog" aria-hidden="true"><i id="pbar"></i></div>
+</header>
+<main>
+<form id="f" class="panel" novalidate></form>
+<aside class="view" aria-label="Bosquejo 3D de tu casa"><div class="live">Bosquejo en vivo</div><canvas id="cv" aria-label="Maqueta 3D que gira"></canvas><div class="cap"><b id="vst">Terreno y replanteo</b><span id="vtx">Arrastrá para girar la maqueta. Se arma sola a medida que respondés.</span><div class="tags" id="vtg"></div></div></aside>
+</main>
+
+<script src="three.min.js"></script>
+<script>
+const WA='5491157130540';
+const S={};
+const chips=(name,list,multi)=>`<div class="opts" role="${multi?'group':'radiogroup'}">${list.map(o=>`<label class="opt"><input type="${multi?'checkbox':'radio'}" name="${name}" value="${o}"><span>${o}</span></label>`).join('')}</div>`;
+const styles=[
+ ['Contemporánea','Líneas rectas, grandes aperturas, mucho vidrio.','#E8E2D6,#2B2B2B,#8A9A8E'],
+ ['Minimalista','Volúmenes puros, pocos materiales, mucha luz.','#F4F1EA,#CFC8BA,#4A4A4A'],
+ ['Española / Mediterránea','Techos de teja, arcos, revoques texturados.','#E9DCC4,#B5683F,#3E5C4A'],
+ ['Campo / Rústica','Madera, piedra, galerías profundas.','#C9B79A,#6B4F36,#556B4E'],
+ ['Moderna con steel frame','Estructura liviana, voladizos, rapidez de obra.','#DADDDE,#1F2A2A,#B88B4A'],
+ ['Todavía no sé','Lo vemos juntos con ejemplos.','#EAE1CF,#D6CAB2,#1E4C4C']];
+const pal=[
+ ['Blancos y madera clara','#F4F1EA,#D8C3A0,#8C7355'],['Grises y negro','#E3E3E1,#8A8A88,#222222'],
+ ['Tierras y terracota','#E9DCC4,#C0764B,#6B4F36'],['Verdes y madera oscura','#C9D2BE,#556B4E,#3A2C20'],
+ ['Azules y arena','#EFE6D2,#8FA8B8,#2F4A5E'],['Que me sugiera Fede','#EAE1CF,#D6CAB2,#1E4C4C']];
+const sw=c=>`<div class="sw">${c.split(',').map(x=>`<i style="background:${x}"></i>`).join('')}</div>`;
+const steps=[
+{t:'Tu familia',h:'Empecemos por <em>quiénes</em> van a vivir ahí.',l:'Una casa se diseña desde las personas. Contame cómo es tu día a día.',q:[
+ {k:'personas',l:'¿Cuántas personas van a vivir en la casa?',r:1,h:`<div class="opts">${['1','2','3','4','5','6 o más'].map(o=>`<label class="opt"><input type="radio" name="personas" value="${o}"><span>${o}</span></label>`).join('')}</div>`},
+ {k:'chicos',l:'¿Hay chicos o planean tenerlos?',h:chips('chicos',['No','Sí, de 0 a 5 años','Sí, de 6 a 12','Sí, adolescentes','Lo estamos pensando'],true)},
+ {k:'mascotas',l:'¿Tienen mascotas?',h:chips('mascotas',['No','Perro/s chico/s','Perro/s grande/s','Gato/s','Otras'],true)},
+ {k:'movilidad',l:'¿Alguien tiene movilidad reducida o va a necesitar accesibilidad en el futuro?',hint:'Nos ayuda a decidir escaleras, rampas, anchos de paso y baños.',h:chips('movilidad',['No','Sí, hoy','Posiblemente a futuro (adultos mayores)']) },
+ {k:'visitas',l:'¿Reciben visitas que se queden a dormir?',h:chips('visitas',['Casi nunca','Algunas veces al año','Seguido','Vive alguien más con frecuencia'])}]},
+{t:'Tu día a día',h:'Cómo <em>vivís</em> la casa.',l:'Estos detalles definen los espacios que realmente vas a usar.',q:[
+ {k:'asado',l:'¿Comen asado seguido?',h:chips('asado',['Todos los fines de semana','De vez en cuando','Casi nunca'])},
+ {k:'quincho',l:'¿Cómo imaginás el espacio del asado?',h:chips('quincho',['Parrilla integrada a la galería','Quincho separado','Parrilla en el living-comedor','No necesito'])},
+ {k:'lavadero',l:'¿Lavan la ropa en la casa? ¿Dónde?',h:chips('lavadero',['Lavadero cerrado','Lavadero junto a la cocina','Lavadero en planta alta','Servicio de lavandería'])},
+ {k:'cocina',l:'La cocina es…',h:chips('cocina',['Abierta al living','Cerrada con isla','Cocina + cocina de servicio','Pequeña y práctica'])},
+ {k:'oficina',l:'¿Trabajan desde casa?',h:chips('oficina',['No','Sí, 1 persona','Sí, 2 personas','Necesito un estudio aparte'])},
+ {k:'extras',l:'¿Qué más te gustaría tener?',hint:'Elegí todo lo que sume.',h:chips('extras',['Pileta','Gimnasio','Sala de cine','Playroom','Bodega','Huerta','Cochera cubierta','Panel solar','Domótica'],true)}]},
+{t:'El terreno',h:'Contame del <em>lote</em>.',l:'Si todavía no tenés terreno, no pasa nada: contame qué estás buscando.',q:[
+ {k:'lote_estado',l:'¿Ya tenés el terreno?',h:chips('lote_estado',['Sí, ya lo tengo','Lo estoy buscando','Tengo uno en mente'])},
+ {k:'zona',l:'¿En qué zona?',h:`<input type="text" name="zona" placeholder="Ej: Nordelta, Escobar, Pilar, Cardales, CABA…" autocomplete="off">`},
+ {k:'m2lote',l:'¿Cuántos m² tiene aproximadamente?',h:`<input type="number" name="m2lote" inputmode="numeric" min="0" placeholder="Ej: 800">`},
+ {k:'desnivel',l:'¿Cómo es el terreno?',h:chips('desnivel',['Plano','Con desnivel','Con pendiente fuerte','No sé'])},
+ {k:'vista',l:'¿Qué hay alrededor?',h:chips('vista',['Frente a laguna o agua','Vista al verde','Calle y vecinos','Esquina','Aún no sé'],true)},
+ {k:'orientacion',l:'¿Sabés hacia dónde mira el frente?',h:chips('orientacion',['Norte','Sur','Este','Oeste','No sé'])}]},
+{t:'Tus espacios',h:'La casa <em>por dentro</em>.',l:'Armamos el programa: cuánto necesitás y cómo se reparte.',q:[
+ {k:'pisos',l:'¿Una planta o dos?',h:chips('pisos',['Una planta','Dos plantas','Tres plantas (por desnivel o vista)','Que me aconsejen'])},
+ {k:'dorm',l:'¿Cuántos dormitorios?',h:chips('dorm',['1','2','3','4','5 o más'])},
+ {k:'suite',l:'¿Cuántas en suite?',h:chips('suite',['Solo la principal','2','Todas','No necesito'])},
+ {k:'m2casa',l:'¿Cuántos m² cubiertos te imaginás?',h:chips('m2casa',['Hasta 150','150–250','250–350','350–500','Más de 500','No sé'])},
+ {k:'living',l:'Los ambientes sociales…',h:chips('living',['Todo integrado','Separados','Doble altura','Muy conectados al jardín'])}]},
+{t:'Estilo y materiales',h:'Cómo <em>se ve</em> tu casa.',l:'Elegí lo que más te represente. No hay respuestas incorrectas.',q:[
+ {k:'estilo',l:'Estilo de casa',h:`<div class="cards">${styles.map(s=>`<label class="opt card"><input type="radio" name="estilo" value="${s[0]}"><span>${sw(s[2])}<b>${s[0]}</b><em>${s[1]}</em></span></label>`).join('')}</div>`},
+ {k:'techo',l:'Techo',h:chips('techo',['Teja a dos aguas','Teja a cuatro aguas','Techo plano / losa','Chapa','Que me aconsejen'])},
+ {k:'fachada',l:'Material principal de fachada',h:chips('fachada',['Ladrillo visto','Revoque blanco','Madera','Piedra','Hormigón visto','Metal / vidrio'])},
+ {k:'paleta',l:'Paleta cromática',h:`<div class="cards">${pal.map(p=>`<label class="opt card"><input type="radio" name="paleta" value="${p[0]}"><span>${sw(p[1])}<b style="font-size:17px">${p[0]}</b></span></label>`).join('')}</div>`},
+ {k:'ref',l:'¿Una casa que te guste? Pegá un link o describila',hint:'Pinterest, Instagram, una obra de Fede…',h:`<textarea name="ref" placeholder="Opcional"></textarea>`}]},
+{t:'Tiempos',h:'<em>Cuándo</em> y con qué escala.',l:'Esto es para orientarte con realismo. Nada de lo que respondas te compromete.',q:[
+ {k:'inicio',l:'¿Cuándo querés empezar?',h:chips('inicio',['Ya mismo','En 3 a 6 meses','En 6 a 12 meses','Más adelante','Estoy explorando'])},
+ {k:'servicio',l:'¿Hasta dónde querés que me involucre?',h:chips('servicio',['Solo anteproyecto','Proyecto ejecutivo','Proyecto y dirección de obra (llave en mano)','Todavía no sé'])},
+ {k:'presu',l:'¿Tenés un presupuesto de referencia?',hint:'Opcional. Me ayuda a que el render sea realista.',h:chips('presu',['Prefiero hablarlo en la llamada','Tengo un número en mente','Todavía no definí'])},
+ {k:'nota',l:'Algo que no te pregunté y quieras contarme',h:`<textarea name="nota" placeholder="Opcional"></textarea>`}]},
+{t:'Tu render',h:'Último paso: <em>¿a dónde te lo mando?</em>',l:'El bosquejo de al lado es solo una guía para vos. Federico recibe tus respuestas y te manda el render conceptual por WhatsApp. Después coordinan una llamada para ajustarlo juntos.',final:true}
+];
+const f=document.getElementById('f');let cur=-1;
+const esc=s=>String(s).replace(/[&<>"]/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]));
+
+function collect(){
+ const fd=new FormData(f);
+ steps.forEach(s=>(s.q||[]).forEach(q=>{const v=fd.getAll(q.k).filter(Boolean);if(v.length)S[q.k]=v.join(', ');else if(f.querySelector('[name="'+q.k+'"]')) delete S[q.k];}));
+ ['nombre','tel'].forEach(k=>{const e=f.querySelector('[name="'+k+'"]');if(e)S[k]=e.value.trim();});
+ if(window.upd)upd();
+}
+function restore(){
+ for(const k in S){f.querySelectorAll('[name="'+k+'"]').forEach(e=>{
+  if(e.type==='radio'||e.type==='checkbox') e.checked=S[k].split(', ').includes(e.value);
+  else e.value=S[k];});}
+}
+
+function intro(){cur=-1;
+ f.innerHTML=`<div class="eyebrow">Gratis · 5 minutos</div><h1>Diseñá tu casa <em>ideal.</em></h1>
+ <p class="lead">Respondé unas preguntas sobre tu familia, tu terreno y tu estilo. Mientras respondés, al costado se va armando un bosquejo 3D de tu casa. Cuando terminás, Federico revisa tus respuestas y te manda tu render. Sin costo y sin compromiso.</p>
+ <div class="sum"><dl><dt>1</dt><dd>Completás el cuestionario (7 pasos cortos)</dd><dt>2</dt><dd>Federico arma tu render conceptual</dd><dt>3</dt><dd>Federico lo revisa y te lo manda por WhatsApp</dd><dt>4</dt><dd>Lo ajustamos juntos en una llamada</dd></dl></div>
+ <div class="nav"><span></span><button type="button" class="btn p" id="go">Empezar</button></div>
+ <p class="note">El bosquejo y el render son conceptuales: sirven para explorar ideas, no son un proyecto de arquitectura. El proyecto detallado se define después, en la llamada.</p>`;
+ document.getElementById('go').onclick=()=>show(0);prog();
+}
+function prog(){if(window.upd)setTimeout(upd,0);const p=(cur+1)/(steps.length);document.getElementById('pbar').style.width=(cur<0?0:p*100)+'%';document.getElementById('stepLbl').textContent=cur<0?'':`Paso ${cur+1} de ${steps.length} · ${steps[cur].t}`;}
+function show(i){
+ if(cur>=0)collect();cur=i;const s=steps[i];
+ let body='';
+ if(s.final){
+  body=`<div class="q row"><div><label for="nombre">Tu nombre</label><input id="nombre" type="text" name="nombre" autocomplete="name" placeholder="Nombre y apellido"></div>
+  <div><label for="tel">Tu WhatsApp (opcional)</label><input id="tel" type="tel" name="tel" autocomplete="tel" placeholder="11 5555 5555"></div></div>
+  <div class="err" id="err">Falta tu nombre.</div>
+  <div class="sum" id="sum"></div>
+  <label class="check"><input type="checkbox" id="ok"> Acepto que Federico use estas respuestas para armar mi render y contactarme.</label>`;
+ } else body=s.q.map(q=>`<div class="q"><div class="lbl" id="l_${q.k}">${q.l}</div>${q.hint?`<p class="hint">${q.hint}</p>`:''}${q.h}</div>`).join('');
+ f.innerHTML=`<div class="step-n">${steps.map((_,j)=>`<i class="${j<=i?'on':''}"></i>`).join('')}</div>
+  <div class="eyebrow">${s.t}</div><h2>${s.h}</h2><p class="lead">${s.l}</p>${body}
+  <div class="nav"><button type="button" class="btn s" id="back">Atrás</button>
+  <button type="button" class="btn p" id="next">${s.final?'Enviar y recibir mi render':'Siguiente'}</button></div>
+  <p class="note">${s.final?'Se abre WhatsApp con tus respuestas listas para enviar. Vos decidís si mandarlas.':'Podés saltear lo que no sepas.'}</p>`;
+ restore();
+ if(s.final)summary();
+ document.getElementById('back').onclick=()=>{collect();i===0?intro():show(i-1)};
+ document.getElementById('next').onclick=()=>s.final?send():show(i+1);
+ prog();window.scrollTo({top:0,behavior:'smooth'});
+}
+const labels={personas:'Personas',chicos:'Chicos',mascotas:'Mascotas',movilidad:'Movilidad reducida',visitas:'Visitas',asado:'Asado',quincho:'Espacio asado',lavadero:'Lavadero',cocina:'Cocina',oficina:'Home office',extras:'Extras',lote_estado:'Terreno',zona:'Zona',m2lote:'m² del lote',desnivel:'Relieve',vista:'Entorno',orientacion:'Orientación',pisos:'Plantas',dorm:'Dormitorios',suite:'Suites',m2casa:'m² cubiertos',living:'Ambientes sociales',estilo:'Estilo',techo:'Techo',fachada:'Fachada',paleta:'Paleta',ref:'Referencia',inicio:'Inicio',servicio:'Servicio',presu:'Presupuesto',nota:'Comentario'};
+function summary(){collect();const rows=Object.keys(labels).filter(k=>S[k]).map(k=>`<dt>${labels[k]}</dt><dd>${esc(S[k])}</dd>`).join('');
+ document.getElementById('sum').innerHTML=rows?`<strong>Tu resumen</strong><dl style="margin-top:10px">${rows}</dl>`:'Todavía no completaste respuestas. Podés volver atrás o enviar igual.';}
+function send(){collect();
+ if(!S.nombre){document.getElementById('err').style.display='block';document.getElementById('nombre').focus();return;}
+ if(!document.getElementById('ok').checked){document.getElementById('ok').focus();return;}
+ let m='Hola Federico, soy '+S.nombre+'. Completé el cuestionario para mi render gratis.\n\n';
+ Object.keys(labels).forEach(k=>{if(S[k])m+='• '+labels[k]+': '+S[k]+'\n';});
+ if(S.tel)m+='\nMi WhatsApp: '+S.tel;
+ m+='\n\n¿Cuándo podemos coordinar la llamada?';
+ const url='https://wa.me/'+WA+'?text='+encodeURIComponent(m);
+ f.innerHTML=`<div class="eyebrow">Listo</div><h2>Gracias, <em>${esc(S.nombre.split(' ')[0])}.</em></h2>
+ <p class="lead">Se abrió WhatsApp con tus respuestas. Mandá el mensaje y Federico te responde con tu render conceptual.</p>
+ <div class="nav"><a class="btn p" href="${url}" target="_blank" rel="noopener">Abrir WhatsApp de nuevo</a><a class="btn s" href="index.html">Volver al inicio</a></div>`;
+ document.getElementById('pbar').style.width='100%';
+ window.open(url,'_blank');
+}
+f.addEventListener('submit',e=>e.preventDefault());
+const EXCL=['No','Aún no sé'];
+f.addEventListener('change',e=>{const t=e.target;if(t.type==='checkbox'&&t.name){const grp=[...f.querySelectorAll('input[name="'+t.name+'"]')];
+ if(t.checked){if(EXCL.includes(t.value))grp.forEach(g=>{if(g!==t)g.checked=false});else grp.forEach(g=>{if(EXCL.includes(g.value))g.checked=false});}}
+ collect()});
+intro();
+</script>
+<script src="viewer.js"></script>
+</body>
+</html>
