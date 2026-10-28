@@ -4,7 +4,7 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <title>Diseñá tu render en 5 minutos — Federico Marzano Pacheco</title>
-<meta name="description" content="Respondé un cuestionario de 5 minutos y recibí un render conceptual de tu casa ideal. Sin costo.">
+<meta name="description" content="Casa, local o edificio: respondé un cuestionario de 5 minutos y recibí un render conceptual de tu proyecto. Sin costo.">
 <link rel="icon" href="favicon-32.png"><link rel="apple-touch-icon" href="apple-touch-icon.png">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,400;0,9..144,500;1,9..144,400&family=Manrope:wght@400;500;600;700&display=swap" rel="stylesheet">
@@ -84,7 +84,7 @@ input:focus,textarea:focus,select:focus{outline:3px solid var(--goldl);border-co
 </header>
 <main>
 <form id="f" class="panel" novalidate></form>
-<aside class="view" aria-label="Bosquejo 3D de tu casa"><div class="live">Bosquejo en vivo</div><canvas id="cv" aria-label="Maqueta 3D que gira"></canvas><div class="cap"><b id="vst">Terreno y replanteo</b><span id="vtx">Arrastrá para girar la maqueta. Se arma sola a medida que respondés.</span><div class="tags" id="vtg"></div></div></aside>
+<aside class="view" aria-label="Bosquejo 3D de tu proyecto"><div class="live">Bosquejo en vivo</div><canvas id="cv" aria-label="Maqueta 3D que gira"></canvas><div class="cap"><b id="vst">Terreno y replanteo</b><span id="vtx">Arrastrá para girar la maqueta. Se arma sola a medida que respondés.</span><div class="tags" id="vtg"></div></div></aside>
 </main>
 
 <script>/**
@@ -110,7 +110,30 @@ const pal=[
  ['Tierras y terracota','#E9DCC4,#C0764B,#6B4F36'],['Verdes y madera oscura','#C9D2BE,#556B4E,#3A2C20'],
  ['Azules y arena','#EFE6D2,#8FA8B8,#2F4A5E'],['Que me sugiera Fede','#EAE1CF,#D6CAB2,#1E4C4C']];
 const sw=c=>`<div class="sw">${c.split(',').map(x=>`<i style="background:${x}"></i>`).join('')}</div>`;
-const steps=[
+function PALV(){return {k:'paleta',l:'Paleta cromática',h:`<div class="cards">${pal.map(p=>`<label class="opt card"><input type="radio" name="paleta" value="${p[0]}"><span>${sw(p[1])}<b style="font-size:17px">${p[0]}</b></span></label>`).join('')}</div>`}}
+const card=(name,list)=>`<div class="cards">${list.map(o=>`<label class="opt card"><input type="radio" name="${name}" value="${o[0]}"><span><b>${o[0]}</b><em>${o[1]}</em></span></label>`).join('')}</div>`;
+const STEP0={t:'Tu proyecto',h:'¿Qué <em>proyecto</em> tenés en mente?',l:'Con esto armo las preguntas justas para tu caso. Son dos respuestas y arrancamos.',q:[
+ {k:'tipo',l:'¿Qué proyecto necesitás?',h:card('tipo',[['Vivienda','Casa para vivir o de fin de semana.'],['Local comercial','Café, tienda, consultorio, oficina o showroom.'],['Edificio','Viviendas en altura, para vender, rentar o vivir.']])},
+ {k:'alcance',l:'¿Qué necesitás hacer?',h:card('alcance',[['Obra nueva','Construir desde cero.'],['Reforma','Remodelar o ampliar algo que ya existe.'],['Solo el render','Ver cómo quedaría antes de decidir.']])}]};
+const VIVREF=[
+{t:'La casa hoy',h:'Contame cómo es <em>tu casa hoy</em>.',l:'Para reformar bien, primero hay que entender lo que ya existe.',q:[
+ {k:'reforma',l:'¿Qué querés reformar?',hint:'Elegí todo lo que corresponda.',h:chips('reforma',['Cocina','Baños','Dormitorios','Living-comedor','Ampliación','Fachada','Toda la casa'],true)},
+ {k:'casa_m2',l:'¿Cuántos m² tiene la casa hoy?',h:chips('casa_m2',['Hasta 100','100–200','200–300','Más de 300','No sé'])},
+ {k:'casa_pisos',l:'¿Cuántas plantas tiene?',h:chips('casa_pisos',['Una planta','Dos plantas'])},
+ {k:'casa_antig',l:'¿Qué antigüedad tiene?',h:chips('casa_antig',['Menos de 10 años','10 a 30 años','30 a 50 años','Más de 50 años','No sé'])},
+ {k:'casa_techo',l:'¿Cómo es el techo actual?',h:chips('casa_techo',['Teja a dos aguas','Teja a cuatro aguas','Losa plana','Chapa'])},
+ {k:'habitada',l:'¿Van a vivir en la casa durante la obra?',h:chips('habitada',['Sí','No','No sé'])}]},
+{t:'Qué cambia',h:'Lo que <em>no te gusta</em> y lo que falta.',l:'Contame qué te molesta hoy. Ahí está la reforma.',q:[
+ {k:'problemas',l:'¿Qué te molesta de la casa hoy?',hint:'Elegí todo lo que corresponda.',h:chips('problemas',['Poca luz','Ambientes chicos','Cocina cerrada','Baños viejos','Humedad','Falta un dormitorio','Fachada antigua','Poca conexión con el jardín'],true)},
+ {k:'ampliacion',l:'Si ampliás, ¿qué sumarías?',h:chips('ampliacion',['No amplío','Un dormitorio','Un ambiente social','Una planta alta','Quincho o galería'])},
+ {k:'objetivo',l:'¿Qué buscás con la reforma?',h:chips('objetivo',['Más espacio','Más luz','Modernizarla','Revalorizarla para vender'])},
+ {k:'personas',l:'¿Cuántas personas viven en la casa?',h:chips('personas',['1','2','3','4','5','6 o más'])}]},
+{t:'Estilo de la reforma',h:'Cómo <em>querés que quede</em>.',l:'Elegí lo que más te represente. No hay respuestas incorrectas.',q:[
+ {k:'estilo',l:'Estilo',h:`<div class="cards">${styles.map(s=>`<label class="opt card"><input type="radio" name="estilo" value="${s[0]}"><span>${sw(s[2])}<b>${s[0]}</b><em>${s[1]}</em></span></label>`).join('')}</div>`},
+ {k:'fachada',l:'Material de la fachada nueva',h:chips('fachada',['Mantener la actual','Revoque blanco','Ladrillo visto','Madera','Piedra','Hormigón visto','Metal / vidrio'])},
+ PALV(),
+ {k:'ref',l:'¿Una reforma que te guste? Pegá un link o describila',h:`<textarea name="ref" placeholder="Opcional"></textarea>`}]}];
+const VIV=[
 {t:'Tu familia',h:'Empecemos por <em>quiénes</em> van a vivir ahí.',l:'Una casa se diseña desde las personas. Contame cómo es tu día a día.',q:[
  {k:'personas',l:'¿Cuántas personas van a vivir en la casa?',r:1,h:`<div class="opts">${['1','2','3','4','5','6 o más'].map(o=>`<label class="opt"><input type="radio" name="personas" value="${o}"><span>${o}</span></label>`).join('')}</div>`},
  {k:'chicos',l:'¿Hay chicos o planean tenerlos?',h:chips('chicos',['No','Sí, de 0 a 5 años','Sí, de 6 a 12','Sí, adolescentes','Lo estamos pensando'],true)},
@@ -143,20 +166,68 @@ const steps=[
  {k:'fachada',l:'Material principal de fachada',h:chips('fachada',['Ladrillo visto','Revoque blanco','Madera','Piedra','Hormigón visto','Metal / vidrio'])},
  {k:'paleta',l:'Paleta cromática',h:`<div class="cards">${pal.map(p=>`<label class="opt card"><input type="radio" name="paleta" value="${p[0]}"><span>${sw(p[1])}<b style="font-size:17px">${p[0]}</b></span></label>`).join('')}</div>`},
  {k:'ref',l:'¿Una casa que te guste? Pegá un link o describila',hint:'Pinterest, Instagram, una obra de Fede…',h:`<textarea name="ref" placeholder="Opcional"></textarea>`}]},
-{t:'Tiempos',h:'<em>Cuándo</em> y con qué escala.',l:'Esto es para orientarte con realismo. Nada de lo que respondas te compromete.',q:[
- {k:'inicio',l:'¿Cuándo querés empezar?',h:chips('inicio',['Ya mismo','En 3 a 6 meses','En 6 a 12 meses','Más adelante','Estoy explorando'])},
- {k:'servicio',l:'¿Hasta dónde querés que me involucre?',h:chips('servicio',['Solo anteproyecto','Proyecto ejecutivo','Proyecto y dirección de obra (llave en mano)','Todavía no sé'])},
- {k:'presu',l:'¿Tenés un presupuesto de referencia?',hint:'Opcional. Me ayuda a que el render sea realista.',h:chips('presu',['Prefiero hablarlo en la llamada','Tengo un número en mente','Todavía no definí'])},
- {k:'nota',l:'Algo que no te pregunté y quieras contarme',h:`<textarea name="nota" placeholder="Opcional"></textarea>`}]},
-{t:'Tu render',h:'Último paso: <em>¿a dónde te lo mando?</em>',l:'El bosquejo de al lado es solo una guía para vos. Federico recibe tus respuestas y te manda el render conceptual por WhatsApp. Después coordinan una llamada para ajustarlo juntos.',final:true}
 ];
+const REF={Vivienda:{k:'reforma',l:'¿Qué querés reformar?',hint:'Elegí todo lo que corresponda.',h:chips('reforma',['Cocina','Baños','Dormitorios','Ampliación','Fachada','Toda la casa'],true)},
+ 'Local comercial':{k:'reforma_l',l:'¿Qué hay que reformar del local?',hint:'Elegí todo lo que corresponda.',h:chips('reforma_l',['Fachada y vidriera','Interior completo','Baños','Cocina o barra','Instalaciones'],true)},
+ Edificio:{k:'reforma_e',l:'¿Qué parte del edificio querés reformar?',hint:'Elegí todo lo que corresponda.',h:chips('reforma_e',['Fachada','Hall de entrada','Unidades','Amenities','Terraza'],true)}};
+const estLoc=[['Industrial','Hierro, ladrillo, hormigón y luz cálida.','#4A4A48,#B5683F,#D9D2C0'],['Nórdico / madera clara','Blancos, madera clara y plantas.','#F1EDE4,#C9A877,#58734F'],['Moderno minimalista','Pocos elementos, líneas limpias.','#F4F1EA,#CFC8BA,#2B2B2B'],['Cálido / rústico','Madera oscura, texturas y tonos tierra.','#D9C3A0,#6B4F36,#A9553B'],['De diseño / llamativo','Colores de marca y piezas que se recuerdan.','#1E4C4C,#E0A33B,#F2EBDD'],['Todavía no sé','Lo vemos juntos con ejemplos.','#EAE1CF,#D6CAB2,#1E4C4C']];
+const PAL={k:'paleta',l:'Paleta cromática',h:`<div class="cards">${pal.map(p=>`<label class="opt card"><input type="radio" name="paleta" value="${p[0]}"><span>${sw(p[1])}<b style="font-size:17px">${p[0]}</b></span></label>`).join('')}</div>`};
+const LOC=[
+{t:'El negocio',h:'Contame de tu <em>negocio</em>.',l:'Un local se diseña para vender. Empecemos por qué hacés y a quién atendés.',q:[
+ {k:'rubro',l:'¿Qué rubro es?',h:chips('rubro',['Café o gastronomía','Indumentaria o tienda','Estética o salud','Oficina o estudio','Showroom','Otro'])},
+ {k:'local_m2',l:'¿Cuántos m² tiene el local?',h:chips('local_m2',['Hasta 50','50–100','100–200','200–400','Más de 400'])},
+ {k:'ubicacion',l:'¿Dónde está?',h:chips('ubicacion',['A la calle','En esquina','En galería o shopping','Sobre ruta o avenida'])},
+ {k:'local_pisos',l:'¿Cuántos niveles?',h:chips('local_pisos',['Planta baja','PB + entrepiso','Dos plantas'])},
+ {k:'publico',l:'¿Cuánta gente atendés a la vez?',h:chips('publico',['Hasta 10 personas','10 a 30','30 a 80','Más de 80'])}]},
+{t:'El espacio',h:'Cómo <em>funciona</em> el local.',l:'Lo que pasa adentro define la planta y la vidriera.',q:[
+ {k:'vidriera',l:'¿Qué vidriera te imaginás?',h:chips('vidriera',['Vidriera de piso a techo','Vidriera mediana','Casi sin vidriera'])},
+ {k:'atencion',l:'¿Cómo atendés?',h:chips('atencion',['Mostrador','Salón con mesas','Góndolas o percheros','Boxes o consultorios','Escritorios'])},
+ {k:'local_extras',l:'¿Qué más necesita el local?',hint:'Elegí todo lo que sume.',h:chips('local_extras',['Baño para clientes','Cocina o barra','Depósito','Probadores','Terraza o deck','Rampa de accesibilidad','Toldo'],true)},
+ {k:'cartel',l:'¿Qué cartel querés en la fachada?',h:chips('cartel',['Cartel luminoso','Letras corpóreas','Cartel pintado','Todavía no sé'])}]},
+{t:'Imagen y marca',h:'Cómo <em>se ve</em> desde la vereda.',l:'La fachada es tu primer vendedor. Elegí lo que mejor represente tu marca.',q:[
+ {k:'local_estilo',l:'Estilo del local',h:`<div class="cards">${estLoc.map(s=>`<label class="opt card"><input type="radio" name="local_estilo" value="${s[0]}"><span>${sw(s[2])}<b>${s[0]}</b><em>${s[1]}</em></span></label>`).join('')}</div>`},
+ {k:'fachada_l',l:'Material principal de fachada',h:chips('fachada_l',['Vidrio y metal','Madera','Ladrillo','Revoque pintado','Chapa o metal'])},
+ PAL,
+ {k:'marca',l:'¿Tu marca tiene colores o logo? Contame',h:`<input type="text" name="marca" placeholder="Opcional. Ej: verde y blanco, logo con una taza…" autocomplete="off">`},
+ {k:'ref',l:'¿Un local que te guste? Pegá un link o describilo',hint:'Pinterest, Instagram, RESET Café…',h:`<textarea name="ref" placeholder="Opcional"></textarea>`}]}];
+const EDI=[
+{t:'El edificio',h:'Contame del <em>edificio</em>.',l:'Primero la escala: cuántos pisos, cuántas unidades y para qué.',q:[
+ {k:'destino',l:'¿Para qué es el edificio?',h:chips('destino',['Venta de unidades','Renta','Uso propio o familiar','Mixto'])},
+ {k:'ed_pisos',l:'¿Cuántos pisos?',h:chips('ed_pisos',['PB + 2','PB + 3 a 5','PB + 6 a 10','Más de 10'])},
+ {k:'ed_unidades',l:'¿Cuántas unidades por piso?',h:chips('ed_unidades',['1','2','3 a 4','5 o más'])},
+ {k:'ed_tipologia',l:'¿Qué unidades querés?',hint:'Elegí todas las que sumen.',h:chips('ed_tipologia',['Monoambientes','2 ambientes','3 ambientes','4 o más','Dúplex en el último piso'],true)},
+ {k:'ed_pb',l:'¿Qué va en planta baja?',h:chips('ed_pb',['Hall y cocheras','Local comercial','Unidades'])}]},
+{t:'El terreno',h:'Contame del <em>lote</em>.',l:'Si todavía no tenés terreno, contame qué estás buscando.',q:[
+ {k:'zona',l:'¿En qué zona?',h:`<input type="text" name="zona" placeholder="Ej: CABA, Pilar, Escobar…" autocomplete="off">`},
+ {k:'m2lote',l:'¿Cuántos m² tiene el lote?',h:`<input type="number" name="m2lote" inputmode="numeric" min="0" placeholder="Ej: 600">`},
+ {k:'ed_frente',l:'¿Cómo es el lote?',h:chips('ed_frente',['Entre medianeras','Esquina','Lote libre en barrio'])},
+ {k:'ed_cocheras',l:'¿Dónde van las cocheras?',h:chips('ed_cocheras',['Subsuelo','Planta baja','No necesita'])}]},
+{t:'Amenities',h:'Lo que <em>suma valor</em>.',l:'Los amenities venden y alquilan. Elegí los que imaginás.',q:[
+ {k:'amenities',l:'¿Qué amenities querés?',hint:'Elegí todos los que sumen.',h:chips('amenities',['Pileta en terraza','SUM','Parrilla','Gimnasio','Solarium','Laundry','Coworking','Bicicletero'],true)}]},
+{t:'Estilo y fachada',h:'Cómo <em>se ve</em> el edificio.',l:'Elegí lo que más te represente. No hay respuestas incorrectas.',q:[
+ {k:'ed_fachada',l:'Material principal de fachada',h:chips('ed_fachada',['Hormigón visto','Ladrillo visto','Revoque blanco','Vidrio y metal','Mixto con madera'])},
+ {k:'ed_balcones',l:'Balcones',h:chips('ed_balcones',['Balcones corridos','Balcones aislados','Ventanales sin balcón','Galerías con vegetación'])},
+ PAL,
+ {k:'ref',l:'¿Un edificio que te guste? Pegá un link o describilo',h:`<textarea name="ref" placeholder="Opcional"></textarea>`}]}];
+const TIEMPOS=()=>{const loc=(S.tipo||'').indexOf('Local')===0,ref=S.alcance==='Reforma';const q=[
+ {k:'inicio',l:'¿Cuándo querés empezar?',h:chips('inicio',['Ya mismo','En 3 a 6 meses','En 6 a 12 meses','Más adelante','Estoy explorando'])}];
+ if(loc&&ref)q.push({k:'abierto',l:'¿El local tiene que seguir abierto durante la obra?',h:chips('abierto',['Sí','No','No sé'])});
+ if(S.alcance!=='Solo el render')q.push({k:'servicio',l:'¿Hasta dónde querés que me involucre?',h:chips('servicio',['Solo anteproyecto','Proyecto ejecutivo','Proyecto y dirección de obra (llave en mano)','Todavía no sé'])});
+ q.push({k:'presu',l:'¿Tenés un presupuesto de referencia?',hint:'Opcional. Me ayuda a que el render sea realista.',h:chips('presu',['Prefiero hablarlo en la llamada','Tengo un número en mente','Todavía no definí'])},
+ {k:'nota',l:'Algo que no te pregunté y quieras contarme',h:`<textarea name="nota" placeholder="Opcional"></textarea>`});
+ return {t:'Tiempos',h:'<em>Cuándo</em> y con qué escala.',l:'Esto es para orientarte con realismo. Nada de lo que respondas te compromete.',q}};
+const FINAL={t:'Tu render',h:'Último paso: <em>¿a dónde te lo mando?</em>',l:'El bosquejo de al lado es solo una guía para vos. Federico recibe tus respuestas y te manda el render conceptual por WhatsApp. Después coordinan una llamada para ajustarlo juntos.',final:true};
+function buildSteps(){const t=S.tipo||'Vivienda';const vref=t==='Vivienda'&&S.alcance==='Reforma';let body=t==='Local comercial'?LOC:t==='Edificio'?EDI:(vref?VIVREF:VIV);
+ if(!vref)body=body.map((s,i)=>i===0&&S.alcance==='Reforma'?Object.assign({},s,{q:[REF[t]].concat(s.q)}):s);
+ return [STEP0].concat(body,[TIEMPOS(),FINAL]);}
+let steps=buildSteps();
 const f=document.getElementById('f');let cur=-1;
 const esc=s=>String(s).replace(/[&<>"]/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]));
 
 function collect(){
  const fd=new FormData(f);
  steps.forEach(s=>(s.q||[]).forEach(q=>{const v=fd.getAll(q.k).filter(Boolean);if(v.length)S[q.k]=v.join(', ');else if(f.querySelector('[name="'+q.k+'"]')) delete S[q.k];}));
- ['nombre','tel'].forEach(k=>{const e=f.querySelector('[name="'+k+'"]');if(e)S[k]=e.value.trim();});
+ ['nombre','tel','email'].forEach(k=>{const e=f.querySelector('[name="'+k+'"]');if(e)S[k]=e.value.trim();});
  if(window.upd)upd();
 }
 function restore(){
@@ -166,9 +237,9 @@ function restore(){
 }
 
 function intro(){cur=-1;
- f.innerHTML=`<div class="eyebrow">Gratis · 5 minutos</div><h1>Diseñá tu casa <em>ideal.</em></h1>
- <p class="lead">Respondé unas preguntas sobre tu familia, tu terreno y tu estilo. Mientras respondés, al costado se va armando un bosquejo 3D de tu casa. Cuando terminás, Federico revisa tus respuestas y te manda tu render. Sin costo y sin compromiso.</p>
- <div class="sum"><dl><dt>1</dt><dd>Completás el cuestionario (7 pasos cortos)</dd><dt>2</dt><dd>Federico arma tu render conceptual</dd><dt>3</dt><dd>Federico lo revisa y te lo manda por WhatsApp</dd><dt>4</dt><dd>Lo ajustamos juntos en una llamada</dd></dl></div>
+ f.innerHTML=`<div class="eyebrow">Gratis · 5 minutos</div><h1>Diseñá tu <em>proyecto.</em></h1>
+ <p class="lead">Casa, local o edificio: respondé unas preguntas y, mientras tanto, al costado se va armando un bosquejo 3D de tu proyecto. Cuando terminás, Federico revisa tus respuestas y te manda tu render. Sin costo y sin compromiso.</p>
+ <div class="sum"><dl><dt>1</dt><dd>Completás el cuestionario (pasos cortos, según tu proyecto)</dd><dt>2</dt><dd>Federico arma tu render conceptual</dd><dt>3</dt><dd>Federico lo revisa y te lo manda por WhatsApp</dd><dt>4</dt><dd>Lo ajustamos juntos en una llamada</dd></dl></div>
  <div class="nav"><span></span><button type="button" class="btn p" id="go">Empezar</button></div>
  <p class="note">El bosquejo y el render son conceptuales: sirven para explorar ideas, no son un proyecto de arquitectura. El proyecto detallado se define después, en la llamada.</p>`;
  document.getElementById('go').onclick=()=>show(0);prog();
@@ -179,31 +250,37 @@ function show(i){
  let body='';
  if(s.final){
   body=`<div class="q row"><div><label for="nombre">Tu nombre</label><input id="nombre" type="text" name="nombre" autocomplete="name" placeholder="Nombre y apellido"></div>
-  <div><label for="tel">Tu WhatsApp (opcional)</label><input id="tel" type="tel" name="tel" autocomplete="tel" placeholder="11 5555 5555"></div></div>
-  <div class="err" id="err">Falta tu nombre.</div>
+  <div><label for="tel">Tu WhatsApp</label><input id="tel" type="tel" name="tel" autocomplete="tel" inputmode="tel" required placeholder="11 5555 5555"></div>
+  <div><label for="email">Tu mail</label><input id="email" type="email" name="email" autocomplete="email" required placeholder="nombre@mail.com"></div></div>
+  <div class="err" id="err" role="alert"></div>
   <div class="sum" id="sum"></div>
   <label class="check"><input type="checkbox" id="ok"> Acepto que Federico use estas respuestas para armar mi render y contactarme.</label>`;
- } else body=s.q.map(q=>`<div class="q"><div class="lbl" id="l_${q.k}">${q.l}</div>${q.hint?`<p class="hint">${q.hint}</p>`:''}${q.h}</div>`).join('');
+ } else body=s.q.map(q=>`<div class="q"><div class="lbl" id="l_${q.k}">${q.l}</div>${q.hint?`<p class="hint">${q.hint}</p>`:''}${q.h}</div>`).join('')+(i===0?'<div class="err" id="err0">Elegí el tipo de proyecto y qué necesitás hacer.</div>':'');
  f.innerHTML=`<div class="step-n">${steps.map((_,j)=>`<i class="${j<=i?'on':''}"></i>`).join('')}</div>
   <div class="eyebrow">${s.t}</div><h2>${s.h}</h2><p class="lead">${s.l}</p>${body}
   <div class="nav"><button type="button" class="btn s" id="back">Atrás</button>
   <button type="button" class="btn p" id="next">${s.final?'Enviar y recibir mi render':'Siguiente'}</button></div>
-  <p class="note">${s.final?'Se abre WhatsApp con tus respuestas listas para enviar. Vos decidís si mandarlas.':'Podés saltear lo que no sepas.'}</p>`;
+  <p class="note">${s.final?'WhatsApp y mail son obligatorios para enviarte el render. Se abre WhatsApp con tus respuestas listas para enviar.':'Podés saltear lo que no sepas.'}</p>`;
  restore();
  if(s.final)summary();
  document.getElementById('back').onclick=()=>{collect();i===0?intro():show(i-1)};
- document.getElementById('next').onclick=()=>s.final?send():show(i+1);
+ document.getElementById('next').onclick=()=>{if(i===0){collect();if(!S.tipo||!S.alcance){document.getElementById('err0').style.display='block';return}steps=buildSteps()}s.final?send():show(i+1)};
  prog();window.scrollTo({top:0,behavior:'smooth'});
 }
-const labels={personas:'Personas',chicos:'Chicos',mascotas:'Mascotas',movilidad:'Movilidad reducida',visitas:'Visitas',asado:'Asado',quincho:'Espacio asado',lavadero:'Lavadero',cocina:'Cocina',oficina:'Home office',extras:'Extras',lote_estado:'Terreno',zona:'Zona',m2lote:'m² del lote',desnivel:'Relieve',vista:'Entorno',orientacion:'Orientación',pisos:'Plantas',dorm:'Dormitorios',suite:'Suites',m2casa:'m² cubiertos',living:'Ambientes sociales',estilo:'Estilo',techo:'Techo',fachada:'Fachada',paleta:'Paleta',ref:'Referencia',inicio:'Inicio',servicio:'Servicio',presu:'Presupuesto',nota:'Comentario'};
-function summary(){collect();const rows=Object.keys(labels).filter(k=>S[k]).map(k=>`<dt>${labels[k]}</dt><dd>${esc(S[k])}</dd>`).join('');
+const labels={casa_m2:'m² actuales',casa_pisos:'Plantas actuales',casa_antig:'Antigüedad',casa_techo:'Techo actual',habitada:'Viven durante la obra',problemas:'Le molesta',ampliacion:'Ampliación',objetivo:'Objetivo',tipo:'Proyecto',alcance:'Alcance',reforma:'A reformar',reforma_l:'A reformar',reforma_e:'A reformar',rubro:'Rubro',local_m2:'m² del local',ubicacion:'Ubicación',local_pisos:'Niveles',publico:'Gente a la vez',vidriera:'Vidriera',atencion:'Atención',local_extras:'Necesita',cartel:'Cartel',local_estilo:'Estilo',fachada_l:'Fachada',marca:'Marca',destino:'Destino',ed_pisos:'Pisos',ed_unidades:'Unidades por piso',ed_tipologia:'Tipologías',ed_pb:'Planta baja',ed_frente:'Lote',ed_cocheras:'Cocheras',amenities:'Amenities',ed_fachada:'Fachada',ed_balcones:'Balcones',abierto:'Abierto durante la obra',personas:'Personas',chicos:'Chicos',mascotas:'Mascotas',movilidad:'Movilidad reducida',visitas:'Visitas',asado:'Asado',quincho:'Espacio asado',lavadero:'Lavadero',cocina:'Cocina',oficina:'Home office',extras:'Extras',lote_estado:'Terreno',zona:'Zona',m2lote:'m² del lote',desnivel:'Relieve',vista:'Entorno',orientacion:'Orientación',pisos:'Plantas',dorm:'Dormitorios',suite:'Suites',m2casa:'m² cubiertos',living:'Ambientes sociales',estilo:'Estilo',techo:'Techo',fachada:'Fachada',paleta:'Paleta',ref:'Referencia',inicio:'Inicio',servicio:'Servicio',presu:'Presupuesto',nota:'Comentario'};
+function curKeys(){const ks=new Set(['tipo','alcance']);steps.forEach(s=>(s.q||[]).forEach(q=>ks.add(q.k)));return ks}
+function summary(){collect();const ck=curKeys();const rows=Object.keys(labels).filter(k=>S[k]&&ck.has(k)).map(k=>`<dt>${labels[k]}</dt><dd>${esc(S[k])}</dd>`).join('');
  document.getElementById('sum').innerHTML=rows?`<strong>Tu resumen</strong><dl style="margin-top:10px">${rows}</dl>`:'Todavía no completaste respuestas. Podés volver atrás o enviar igual.';}
 function send(){collect();
- if(!S.nombre){document.getElementById('err').style.display='block';document.getElementById('nombre').focus();return;}
+ const er=document.getElementById('err');const bad=(id,msg)=>{er.textContent=msg;er.style.display='block';document.getElementById(id).focus()};
+ if(!S.nombre)return bad('nombre','Falta tu nombre.');
+ if((S.tel||'').replace(/\D/g,'').length<8)return bad('tel','Necesito tu WhatsApp para mandarte el render.');
+ if(!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(S.email||''))return bad('email','Revisá tu mail: tiene que ser algo como nombre@mail.com.');
+ er.style.display='none';
  if(!document.getElementById('ok').checked){document.getElementById('ok').focus();return;}
- let m='Hola Federico, soy '+S.nombre+'. Completé el cuestionario para mi render gratis.\n\n';
- Object.keys(labels).forEach(k=>{if(S[k])m+='• '+labels[k]+': '+S[k]+'\n';});
- if(S.tel)m+='\nMi WhatsApp: '+S.tel;
+ let m='Hola Federico, soy '+S.nombre+'. Completé el cuestionario para mi render.\n\n';
+ const ck=curKeys();Object.keys(labels).forEach(k=>{if(S[k]&&ck.has(k))m+='• '+labels[k]+': '+S[k]+'\n';});
+ m+='\nMi WhatsApp: '+S.tel+'\nMi mail: '+S.email;
  m+='\n\n¿Cuándo podemos coordinar la llamada?';
  const url='https://wa.me/'+WA+'?text='+encodeURIComponent(m);
  f.innerHTML=`<div class="eyebrow">Listo</div><h2>Gracias, <em>${esc(S.nombre.split(' ')[0])}.</em></h2>
@@ -216,7 +293,8 @@ f.addEventListener('submit',e=>e.preventDefault());
 const EXCL=['No','Aún no sé'];
 f.addEventListener('change',e=>{const t=e.target;if(t.type==='checkbox'&&t.name){const grp=[...f.querySelectorAll('input[name="'+t.name+'"]')];
  if(t.checked){if(EXCL.includes(t.value))grp.forEach(g=>{if(g!==t)g.checked=false});else grp.forEach(g=>{if(EXCL.includes(g.value))g.checked=false});}}
- collect()});
+ collect();
+ if(t.name==='tipo'||t.name==='alcance'){steps=buildSteps();const bars=f.querySelector('.step-n');if(bars)bars.innerHTML=steps.map((_,j)=>`<i class="${j<=cur?'on':''}"></i>`).join('');prog()}});
 intro();
 </script>
 <script>(function(){
@@ -367,16 +445,179 @@ function build(stage){
  fac.forEach(f=>tags.push('fachada: '+f.toLowerCase()));
  return fin(tags,stage);
 }
+let stageLbl=null;
 function fin(tags,stage){
- const st=Math.min(stage,6);
- document.getElementById('vst').textContent=stageNames[st];
+ const st=Math.max(0,Math.min(stage,6));
+ document.getElementById('vst').textContent=stageLbl||stageNames[st];stageLbl=null;
  document.getElementById('vtg').innerHTML=[...new Set(tags)].slice(0,24).map(t=>'<span>'+t+'</span>').join('');
- document.getElementById('vtx').textContent=st>=6?'Este bosquejo es solo una guía para vos. Federico arma tu render con tus respuestas.':'Arrastrá para girar. Se va armando con tus respuestas.';
+ const last=cur>=steps.length-1;
+ document.getElementById('vtx').textContent=last?'Este bosquejo es solo una guía para vos. Federico arma tu render con tus respuestas.':'Arrastrá para girar. Se va armando con tus respuestas.';
+}
+let camY=.3;
+function reset(){if(G){root.remove(G);G.traverse(o=>{if(o.geometry)o.geometry.dispose()})}G=new THREE.Group();root.add(G);sun.position.set(5,8,4);tgtDist=9.6;camY=.3}
+const glass=(o)=>M('#7FA6B5',Object.assign({transparent:true,opacity:.42,roughness:.05,metalness:.2},o||{}));
+function people(n,x0,z0){for(let i=0;i<n;i++){const f=new THREE.Mesh(new THREE.CylinderGeometry(.045,.05,.26,10),M(i%3?'#1E4C4C':'#C2AD7A'));f.position.set(x0+(i%6)*.22,.14,z0+Math.floor(i/6)*.2);f.castShadow=true;G.add(f)}}
+function city(opts){
+ // manzana, vereda y calle; opts.corner, opts.mall, opts.lawn
+ box(6,.3,6,opts.lawn?'#B3BF93':'#9C978A',0,-.15,0);
+ if(opts.lawn){[[-2.3,-2],[2.2,-1.8],[-2.4,1.2],[2.4,.9]].forEach(([x,z])=>{add(new THREE.Mesh(new THREE.CylinderGeometry(.02,.03,.2),M('#6B4F36')),x,.1,z);add(new THREE.Mesh(new THREE.ConeGeometry(.2,.5,8),M('#58734F')),x,.42,z)})}
+ if(opts.mall){box(6,.02,2.2,'#E7E1D3',0,.01,2.0);return}
+ box(6,.06,.8,'#D3CCBC',0,.03,1.5);
+ box(6,.02,1.6,'#55585A',0,.01,2.7);
+ for(let i=-2;i<=2;i++)box(.35,.005,.05,'#F2EBDD',i*1.2,.025,2.7);
+ if(opts.corner){box(.8,.06,6,'#D3CCBC',2.5,.03,0);box(.9,.02,6,'#55585A',3.05,.01,-.2)}
+}
+function neighbor(x,w,h,col){const b=box(w,h,2.2,col,x,h/2,-.1,{transparent:true,opacity:.6});edges(b);for(let f=0;f<Math.floor(h/.3);f++)for(let j=0;j<2;j++){const win=new THREE.Mesh(new THREE.PlaneGeometry(w*.25,.14),M('#3B4F57',{roughness:.3}));win.position.set(x-w/4+j*w/2,.2+f*.3,1.006);G.add(win)}}
+const facL={'Vidrio y metal':'#3A3F42','Madera':'#A67C52','Ladrillo':'#A9553B','Revoque pintado':'#EDE6D6','Chapa o metal':'#6F7478'};
+const estL={'Industrial':['#4A4A48','#B5683F'],'Nórdico / madera clara':['#F1EDE4','#C9A877'],'Moderno minimalista':['#F4F1EA','#2B2B2B'],'Cálido / rústico':['#D9C3A0','#6B4F36'],'De diseño / llamativo':['#1E4C4C','#E0A33B']};
+function buildLocal(stage){
+ reset();const tags=[];const sel=k=>(S[k]||'').split(', ').filter(Boolean);
+ tgtDist=7.4;const ub=S.ubicacion||'';const mall=ub.indexOf('galería')>=0,corner=ub.indexOf('esquina')>=0;
+ city({corner,mall});
+ const wmap={'Hasta 50':1.5,'50–100':1.9,'100–200':2.3,'200–400':2.7,'Más de 400':3.1};const W=wmap[S.local_m2]||2.1,D=2.2;
+ const hmap={'Planta baja':.55,'PB + entrepiso':.8,'Dos plantas':1.1};const H=hmap[S.local_pisos]||.6;
+ const nc=['#CFC8B8','#BDB5A3','#D9D2C0'];
+ 
+ if(ub)tags.push(ub.toLowerCase());if(S.rubro)tags.push(S.rubro.toLowerCase());if(S.local_m2)tags.push(S.local_m2+' m²');
+ if(stage<1){[[-1,-1],[1,-1],[1,1],[-1,1]].forEach(c=>{const p=new THREE.Mesh(new THREE.CylinderGeometry(.015,.015,.3),M('#C2AD7A'));p.position.set(c[0]*W/2,.15,-.1+c[1]*D/2);G.add(p)});stageLbl='Tu local en la cuadra';return fin(tags,0)}
+ const est=estL[S.local_estilo]||null;const pal=palettes[S.paleta]||null;
+ const wall=facL[S.fachada_l]||(pal&&pal[0])||(est&&est[0])||'#E8E2D6';const acc=(pal&&pal[1])||(est&&est[1])||'#1E4C4C';
+ // piso, fondo y laterales
+ box(W,.03,D,'#B9AE98',0,.015,-.1);
+ box(W,H,.06,wall,0,H/2,-.1-D/2);box(.06,H,D,wall,-W/2,H/2,-.1);box(.06,H,D,wall,W/2,H/2,-.1);
+ box(W+.08,.06,D+.08,'#8C8A84',0,H+.03,-.1);
+ if(S.local_pisos==='PB + entrepiso'){box(W*.95,.03,D*.4,'#9C8F78',0,.55,-.1-D*.28)}
+ if(S.local_pisos==='Dos plantas'){box(W,.04,D,'#9C8F78',0,.55,-.1)}
+ // fachada: vidriera, banda de cartel y puerta
+ const zf=-.1+D/2;const vid=S.vidriera||'Vidriera de piso a techo';const band=.14;
+ let gh,gy;if(vid.indexOf('piso a techo')>=0){gh=H-band-.02;gy=gh/2+.01}else if(vid.indexOf('mediana')>=0){gh=(H-band)*.55;gy=.12+gh/2;box(W,.12,.05,wall,0,.06,zf)}else{gh=(H-band)*.3;gy=(H-band)*.55;box(W,H-band,.05,wall,0,(H-band)/2,zf-.01)}
+ add(new THREE.Mesh(new THREE.BoxGeometry(W-.06,gh,.02),glass()),0,gy,zf);
+ [-W/2+.03,W/2-.03,0].forEach(x=>box(.03,H-band,.04,'#2B2E30',x,(H-band)/2,zf+.01));
+ box(.28,(H-band)*.85,.03,'#2B2E30',W*.32,(H-band)*.425,zf+.02);
+ const cart=S.cartel||'';
+ const bandM=cart.indexOf('luminoso')>=0?{emissive:new THREE.Color(acc),emissiveIntensity:.55}:{};
+ box(W,band,.07,cart.indexOf('pintado')>=0?acc:(cart.indexOf('corpóreas')>=0?wall:acc),0,H-band/2,zf+.01,bandM);
+ if(cart.indexOf('corpóreas')>=0)for(let i=0;i<6;i++)box(.07,.08,.03,'#C2AD7A',-.25+i*.1,H-band/2,zf+.06);
+ if(cart)tags.push(cart.toLowerCase());tags.push(vid.toLowerCase());
+ if(corner){add(new THREE.Mesh(new THREE.BoxGeometry(.02,gh,D*.7),glass()),W/2+.02,gy,-.1+D*.1);tags.push('dos frentes')}
+ // interior según la atención
+ const at=S.atencion||'';
+ if(at.indexOf('Mostrador')>=0)box(W*.55,.16,.18,acc,-W*.1,.08,-.1-D*.15);
+ if(at.indexOf('mesas')>=0)for(let i=0;i<3;i++)for(let j=0;j<2;j++){const x=-W/2+.4+i*(W-.8)/2,z=-.1+j*.55;add(new THREE.Mesh(new THREE.CylinderGeometry(.09,.09,.02,12),M('#6B4F36')),x,.14,z);add(new THREE.Mesh(new THREE.CylinderGeometry(.015,.015,.13),M('#2B2B2B')),x,.07,z)}
+ if(at.indexOf('Góndolas')>=0)for(let i=0;i<3;i++)box(.08,.3,D*.55,acc,-W/2+.45+i*(W-.9)/2,.15,-.2);
+ if(at.indexOf('Boxes')>=0)for(let i=1;i<3;i++)box(.03,.35,D*.45,'#F2EBDD',-W/2+i*W/3,.175,-.1-D*.25);
+ if(at.indexOf('Escritorios')>=0)for(let i=0;i<2;i++)for(let j=0;j<2;j++)box(.35,.12,.18,'#C9A877',-W/4+i*W/2,.06,-.4+j*.5);
+ if(at)tags.push(at.toLowerCase());
+ const ex=sel('local_extras');
+ if(ex.includes('Toldo')){const t=box(W*.9,.02,.45,acc,0,H-band-.06,zf+.22);t.rotation.x=.3;tags.push('toldo')}
+ if(ex.includes('Terraza o deck')&&!mall){box(W*.8,.04,.55,'#A67C52',0,.08,zf+.4);for(let i=0;i<2;i++)add(new THREE.Mesh(new THREE.CylinderGeometry(.08,.08,.02,12),M('#2B2B2B')),-W*.2+i*W*.4,.2,zf+.42);tags.push('deck en la vereda')}
+ if(ex.includes('Rampa de accesibilidad')){const r=box(.3,.02,.35,'#B9AE98',W*.32,.05,zf+.2);r.rotation.x=.15;tags.push('rampa')}
+ ex.filter(x=>!['Toldo','Terraza o deck','Rampa de accesibilidad'].includes(x)).forEach(x=>tags.push(x.toLowerCase()));
+ const pm={'Hasta 10 personas':3,'10 a 30':6,'30 a 80':9,'Más de 80':12};people(pm[S.publico]||0,-1.2,mall?1.4:1.35);
+ if(S.local_estilo&&S.local_estilo!=='Todavía no sé')tags.push(S.local_estilo.toLowerCase());
+ if(S.fachada_l)tags.push('fachada: '+S.fachada_l.toLowerCase());
+ stageLbl=['Tu local en la cuadra','El local y su programa','Vidriera y espacio interior','Imagen y marca','Listo para revisión','Listo para revisión'][Math.min(stage,5)];
+ return fin(tags,stage);
+}
+const facE={'Hormigón visto':'#A5A6A3','Ladrillo visto':'#A9553B','Revoque blanco':'#F1EDE4','Vidrio y metal':'#5B6B72','Mixto con madera':'#C9A877'};
+function buildEdificio(stage){
+ reset();const tags=[];const sel=k=>(S[k]||'').split(', ').filter(Boolean);
+ const fr=S.ed_frente||'';const corner=fr.indexOf('Esquina')>=0,libre=fr.indexOf('libre')>=0;
+ city({corner,lawn:libre});
+ const nmap={'PB + 2':3,'PB + 3 a 5':5,'PB + 6 a 10':8,'Más de 10':12};const n=nmap[S.ed_pisos]||4;
+ const fh=.3,W=2.4,D=2.0,z0=-.2,zf=z0+D/2;
+ tgtDist=7.6+n*.22;camY=.2+n*fh*.3;
+ 
+ if(fr)tags.push(fr.toLowerCase());
+ if(stage<1){[[-1,-1],[1,-1],[1,1],[-1,1]].forEach(c=>{const p=new THREE.Mesh(new THREE.CylinderGeometry(.015,.015,.3),M('#C2AD7A'));p.position.set(c[0]*W/2,.15,z0+c[1]*D/2);G.add(p)});stageLbl='El lote en la cuadra';return fin(tags,0)}
+ const pal=palettes[S.paleta]||null;const wall=facE[S.ed_fachada]||(pal&&pal[0])||'#E3DDD0';const acc=(pal&&pal[1])||'#2B2E30';
+ const up=({'1':1,'2':2,'3 a 4':3,'5 o más':5})[S.ed_unidades]||2;
+ const bal=S.ed_balcones||'';
+ for(let i=0;i<n;i++){const y=i*fh;
+  const b=box(W,fh-.03,D,wall,0,y+fh/2,z0);edges(b);box(W+.04,.03,D+.04,'#D9D3C6',0,y+fh-.015,z0);
+  if(i===0){const pb=S.ed_pb||'';
+   if(pb.indexOf('Local')>=0){add(new THREE.Mesh(new THREE.BoxGeometry(W*.9,fh*.75,.02),glass()),0,fh*.42,zf+.01);box(W,.06,.05,acc,0,fh-.06,zf+.02);tags.push('local en PB')}
+   else{box(W*.35,fh*.7,.02,'#2B2E30',-W*.25,fh*.35,zf+.01);add(new THREE.Mesh(new THREE.BoxGeometry(W*.3,fh*.75,.02),glass()),W*.2,fh*.4,zf+.01);if(pb)tags.push(pb.toLowerCase())}
+   continue}
+  for(let u=0;u<up;u++){const uw=W/up;const x=-W/2+uw*(u+.5);
+   add(new THREE.Mesh(new THREE.BoxGeometry(uw*.75,fh*.6,.02),glass({opacity:.6,color:'#4E6670'})),x,y+fh*.5,zf+.01);
+   if(bal.indexOf('aislados')>=0){box(uw*.6,.03,.22,'#D9D3C6',x,y+.02,zf+.11);add(new THREE.Mesh(new THREE.BoxGeometry(uw*.6,.1,.01),glass()),x,y+.08,zf+.22)}
+   if(bal.indexOf('Galerías')>=0){box(uw*.85,.03,.28,'#D9D3C6',x,y+.02,zf+.14);box(uw*.8,.07,.06,'#58734F',x,y+.07,zf+.26)}}
+  if(bal.indexOf('corridos')>=0){box(W,.03,.25,'#D9D3C6',0,y+.02,zf+.125);add(new THREE.Mesh(new THREE.BoxGeometry(W,.1,.01),glass()),0,y+.08,zf+.25)}
+ }
+ const top=n*fh;box(W+.06,.05,D+.06,acc,0,top+.025,z0);
+ const am=sel('amenities');
+ if(am.includes('Pileta en terraza')){box(W*.45,.03,D*.35,'#E7DFCB',-W*.2,top+.065,z0+D*.15);box(W*.4,.03,D*.3,'#5EB0C9',-W*.2,top+.08,z0+D*.15,{roughness:.15})}
+ if(am.includes('SUM')||am.includes('Gimnasio')||am.includes('Coworking')){add(new THREE.Mesh(new THREE.BoxGeometry(W*.35,fh*.7,D*.4),glass({opacity:.55})),W*.25,top+.05+fh*.35,z0-D*.2)}
+ if(am.includes('Parrilla')){box(.18,.12,.12,'#2B2B2B',W*.35,top+.11,z0+D*.3)}
+ if(am.includes('Solarium')){box(W*.3,.02,D*.25,'#A67C52',W*.2,top+.06,z0+D*.25)}
+ am.forEach(a=>tags.push(a.toLowerCase()));
+ if((S.ed_cocheras||'').indexOf('Subsuelo')>=0&&!libre){const r=box(.4,.02,.7,'#3A3A3A',W/2-.25,-.05,zf+.3);r.rotation.x=-.18;tags.push('cocheras en subsuelo')}
+ tags.push(S.ed_pisos?('PB + '+(n-1)+' pisos'):(n+' niveles'));tags.push(up+(up>1?' unidades':' unidad')+' por piso');
+ if(S.destino)tags.push(S.destino.toLowerCase());if(bal)tags.push(bal.toLowerCase());if(S.ed_fachada)tags.push('fachada: '+S.ed_fachada.toLowerCase());
+ stageLbl=['El lote en la cuadra','Volumen y pisos','Implantación','Amenities en terraza','Fachada y balcones','Listo para revisión','Listo para revisión'][Math.min(stage,6)];
+ return fin(tags,stage);
+}
+const ESTV={'Contemporánea':['#E8E2D6','#2B2B2B'],'Minimalista':['#F4F1EA','#4A4A4A'],'Española / Mediterránea':['#E9DCC4','#B5683F'],'Campo / Rústica':['#C9B79A','#6B4F36'],'Moderna con steel frame':['#DADDDE','#1F2A2A']};
+function buildReforma(stage){
+ reset();tgtDist=6.6;camY=.2;const tags=[];const sel=k=>(S[k]||'').split(', ').filter(Boolean);
+ city({lawn:true});box(.7,.03,1.6,'#CFC8B8',1.5,.015,1.8);
+ const m2=({'Hasta 100':90,'100–200':150,'200–300':250,'Más de 300':340})[S.casa_m2]||150;
+ const pisos=S.casa_pisos==='Dos plantas'?2:1;const fh=.3;
+ const A=m2/pisos;const W=Math.min(3.2,Math.sqrt(A*1.6)/10),D=Math.min(2.2,A/(W*100)),z0=-.3,zf=z0+D/2;
+ const ref=sel('reforma');const toda=ref.includes('Toda la casa');const pr=sel('problemas');
+ const pal=palettes[S.paleta]||null;const ev=ESTV[S.estilo]||null;
+ const fac=S.fachada&&S.fachada!=='Mantener la actual'?facade[S.fachada]:null;
+ const nuevo=fac||(pal&&pal[0])||(ev&&ev[0])||'#F1EDE4';const acc=(pal&&pal[1])||(ev&&ev[1])||'#1E4C4C';
+ const viejo='#D6CDB8',GOLD=0xC2AD7A;
+ const hl=m=>{const l=new THREE.LineSegments(new THREE.EdgesGeometry(m.geometry),new THREE.LineBasicMaterial({color:GOLD}));m.add(l);return m};
+ if(S.casa_m2)tags.push(S.casa_m2+' m² hoy');if(S.casa_antig&&S.casa_antig!=='No sé')tags.push(S.casa_antig.toLowerCase());
+ const interior=ref.some(r=>['Cocina','Baños','Dormitorios','Living-comedor'].includes(r));
+ const show=stage>=1;
+ // casa existente
+ const fachadaNueva=toda||ref.includes('Fachada')||pr.includes('Fachada antigua');
+ const wallCol=fachadaNueva&&show?nuevo:viejo;
+ const op=interior&&show?{transparent:true,opacity:.35}:{};
+ for(let i=0;i<pisos;i++){const b=box(W,fh-.01,D,wallCol,0,.02+fh/2+i*fh,z0,op);edges(b);if(fachadaNueva&&show)hl(b)}
+ const top=.02+pisos*fh;
+ // ventanas: chicas si es vieja, grandes si hay poca luz o fachada nueva
+ const big=show&&(pr.includes('Poca luz')||fachadaNueva||S.objetivo==='Más luz');
+ for(let i=0;i<pisos;i++){const k=big?3:4;for(let j=0;j<k;j++){const ww=big?W*.22:W*.1,hh=big?fh*.62:fh*.35;
+  const w=new THREE.Mesh(new THREE.PlaneGeometry(ww,hh),M('#27404A',{roughness:.2,metalness:.3}));w.position.set(-W/2+W*(j+.5)/k,.02+fh*.55+i*fh,zf+.006);G.add(w);
+  if(big){const fr=box(ww+.03,hh+.03,.01,'#C2AD7A',w.position.x,w.position.y,zf+.003)}}}
+ if(big)tags.push('ventanales más grandes');
+ // techo actual o nuevo
+ const rt=S.casa_techo||'Teja a dos aguas';const rh=Math.min(.38,W*.13),o=.1;
+ const roofCol=toda&&show?acc:(rt==='Chapa'?'#6F7478':rt==='Losa plana'?'#9C978A':'#A8634A');
+ const ropt=interior&&show?{transparent:true,opacity:.25}:{};
+ const amp=S.ampliacion||'';const alta=show&&amp==='Una planta alta';
+ if(!alta){
+  if(rt==='Losa plana'){box(W+o*2,.04,D+o*2,roofCol,0,top+.02,z0,ropt)}
+  else if(rt.indexOf('cuatro')>=0){const c=new THREE.Mesh(new THREE.ConeGeometry(Math.SQRT1_2,rh,4),M(roofCol,ropt));c.rotation.y=Math.PI/4;c.scale.set(W+o*2,1,D+o*2);add(c,0,top+rh/2,z0)}
+  else{const sh=new THREE.Shape();sh.moveTo(-(W/2+o),0);sh.lineTo(W/2+o,0);sh.lineTo(0,rh);sh.lineTo(-(W/2+o),0);const g=new THREE.ExtrudeGeometry(sh,{depth:D+o*2,bevelEnabled:false});g.translate(0,0,-(D/2+o));add(new THREE.Mesh(g,M(roofCol,ropt)),0,top,z0)}}
+ // zonas interiores a reformar
+ if(show&&interior){const zones=[['Cocina','#E0A33B',-W*.25,z0+D*.2],['Living-comedor','#C9A877',W*.2,z0+D*.2],['Baños','#5EB0C9',-W*.3,z0-D*.25],['Dormitorios','#7C9A57',W*.2,z0-D*.25]];
+  zones.forEach(([n,c,x,z])=>{if(ref.includes(n)||toda){const p=box(W*.42,.03,D*.42,c,x,.05,z);hl(p);if(n==='Cocina')box(W*.3,.1,.08,'#2B2B2B',x,.1,z-D*.12);if(n==='Baños')box(.12,.08,.08,'#F2EBDD',x,.09,z);if(n==='Dormitorios')box(.28,.06,.36,'#F2EBDD',x,.08,z)}});
+  tags.push('vista interior')}
+ // ampliación
+ if(show&&amp&&amp!=='No amplío'){
+  if(alta){const b=hl(box(W*.85,fh-.01,D*.9,nuevo,-W*.05,top+fh/2,z0));box(W*.85+.12,.04,D*.9+.12,acc,-W*.05,top+fh+.02,z0)}
+  else if(amp.indexOf('Quincho')===0){box(W*.6,.03,.6,'#B9A586',0,.04,zf+.32);const r=hl(box(W*.62,.03,.64,acc,0,.02+fh*.8,zf+.32));[-.28,.28].forEach(k=>box(.03,fh*.78,.03,acc,k*W,.02+fh*.39,zf+.6));box(.16,.1,.1,'#2B2B2B',W*.2,.08,zf+.2)}
+  else{const aw=amp==='Un dormitorio'?.7:1.0;const b=hl(box(aw,fh-.01,D*.7,nuevo,W/2+aw/2,.02+fh/2,z0+D*.15));box(aw+.08,.04,D*.7+.08,acc,W/2+aw/2,.02+fh+.02,z0+D*.15);
+   const w=new THREE.Mesh(new THREE.PlaneGeometry(aw*.6,fh*.6),M('#27404A',{roughness:.2}));w.position.set(W/2+aw/2,.02+fh*.55,z0+D*.15+D*.35+.006);G.add(w)}
+  tags.push('ampliación: '+amp.toLowerCase())}
+ if(show&&pr.includes('Poca conexión con el jardín')){box(W*.5,.03,.45,'#A67C52',-W*.15,.035,zf+.25);tags.push('deck al jardín')}
+ ref.forEach(r=>tags.push(r.toLowerCase()));
+ if(S.estilo&&S.estilo!=='Todavía no sé')tags.push(S.estilo.toLowerCase());if(fac)tags.push('fachada: '+S.fachada.toLowerCase());
+ stageLbl=stage<1?'Tu casa como está hoy':['Tu casa como está hoy','Qué se reforma','Lo nuevo','Estilo de la reforma','Listo para revisión','Listo para revisión'][Math.min(stage,5)];
+ return fin(tags,stage);
 }
 let sig='';
-window.upd=function(){const st=cur<0?0:cur;const k=JSON.stringify(S)+st;if(k===sig)return;sig=k;try{build(st)}catch(e){console.error(e)}};
+window.upd=function(){const st=cur<0?0:cur;const k=JSON.stringify(S)+st;if(k===sig)return;sig=k;
+ try{const t=S.tipo||'';if(t.indexOf('Local')===0)buildLocal(st);else if(t.indexOf('Edificio')===0)buildEdificio(st);else if(S.alcance==='Reforma')buildReforma(st);else{reset();root.remove(G);G=null;build(Math.max(0,st-1))}}catch(e){console.error(e)}};
 function loop(){requestAnimationFrame(loop);if(auto)rot+=.004;root.rotation.y=rot;
- const r=tgtDist;cam.position.set(0,r*.42,r*.95);cam.lookAt(0,.3,0);renderer.render(scene,cam)}
+ const r=tgtDist;cam.position.set(0,camY+r*.42,r*.95);cam.lookAt(0,camY,0);renderer.render(scene,cam)}
+window.__rot=v=>{auto=false;rot=v};
 loop();upd();
 })();
 </script>
