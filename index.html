@@ -12,6 +12,21 @@ header nav div a.act:not([href^="cuestionario"]){color:#A0823F !important}
 .eb{flex:1 1 100%;display:flex;align-items:center;gap:12px;font-size:12.5px;font-weight:700;letter-spacing:.18em;text-transform:uppercase;color:#6E5A2E;margin:0 0 14px}
 .eb i{font:italic 400 15px 'Fraunces',serif;letter-spacing:0;color:#A0823F}
 #render .eb,#referencias .eb{color:#D9C08A}
+.hero{position:relative;overflow:hidden;background:#EFE7D6;min-height:calc(100svh - 78px);display:flex;flex-direction:column}
+.hbg{position:absolute;inset:0;overflow:hidden}
+.hbg img{position:absolute;left:0;top:-6%;width:100%;height:112%;object-fit:cover;object-position:50% 55%;opacity:.5;will-change:transform}
+.hbg::after{content:"";position:absolute;inset:0;background:linear-gradient(90deg,rgba(239,231,214,.88) 0%,rgba(239,231,214,.45) 55%,rgba(239,231,214,.1) 100%),linear-gradient(180deg,rgba(239,231,214,0) 70%,rgba(239,231,214,.9) 100%)}
+.hwrap{position:relative;flex:1;display:flex;flex-direction:column;justify-content:center;gap:26px;max-width:1240px;width:100%;margin:0 auto;padding:72px 32px 56px}
+.heb{font-size:13px;font-weight:700;letter-spacing:.16em;text-transform:uppercase;color:#6E5A2E}
+.hh{margin:0;font-family:'Fraunces',serif;font-weight:400;font-size:clamp(46px,9vw,132px);line-height:.98;letter-spacing:-.035em;color:#1E4C4C;display:flex;flex-direction:column;white-space:nowrap}
+.hh em{color:#A0823F}
+.hl{display:block;will-change:transform}
+.hbot{display:flex;flex-wrap:wrap;align-items:center;gap:22px 40px;margin-top:8px}
+.hbot p{margin:0;color:#2f3d3d;max-width:480px}
+.hcta{background:#1E4C4C;color:#F2EBDD;text-decoration:none;font-weight:700;padding:16px 26px;border-radius:999px;min-height:44px;box-sizing:border-box;display:inline-flex;align-items:center;gap:10px;transition:transform .25s,background .25s}
+.hcta:hover{transform:translateY(-2px);background:#26605f}
+.hcap{position:absolute;right:32px;bottom:20px;background:rgba(242,235,221,.8);backdrop-filter:blur(10px);-webkit-backdrop-filter:blur(10px);border:1px solid rgba(255,255,255,.6);color:#1F2A2A;font-size:11px;font-weight:700;letter-spacing:.1em;text-transform:uppercase;padding:6px 12px;border-radius:999px}
+@media(max-width:700px){.hwrap{padding:56px 20px 44px}.hh{font-size:clamp(38px,12.5vw,64px);white-space:normal}.hcap{right:20px}}
 .cue{position:absolute;left:max(32px,calc((100vw - 1240px)/2 + 32px));bottom:84px;z-index:2;display:flex;align-items:center;gap:14px;font-size:11.5px;font-weight:700;letter-spacing:.2em;text-transform:uppercase;color:#1F2A2A;pointer-events:none}
 .cue i{display:block;width:1px;height:46px;background:linear-gradient(#1F2A2A,transparent);transform-origin:top;animation:cue 2.2s ease-in-out infinite}
 @keyframes cue{0%{transform:scaleY(0)}55%{transform:scaleY(1)}100%{transform:scaleY(1);opacity:0}}
@@ -56,24 +71,17 @@ header nav div a.act:not([href^="cuestionario"]){color:#A0823F !important}
 </header>
 
 <div id="sp" aria-hidden="true"></div>
-<section id="inicio" style="position:relative;overflow:hidden;background:#DCD1BC">
+<section id="inicio" class="hero">
 <div class="cue" aria-hidden="true"><i></i>Seguí bajando</div>
-<img src="hero-vizcachas-bg.webp" alt="" aria-hidden="true" style="position:absolute;inset:-40px;width:calc(100% + 80px);height:calc(100% + 80px);object-fit:cover;filter:blur(28px) saturate(1.1);opacity:.75">
-<div style="position:absolute;inset:0;background:rgba(242,235,221,0.35)"></div>
-<div style="position:relative;max-width:1240px;margin:0 auto;padding:72px 32px;display:flex;flex-wrap:wrap;align-items:center;gap:32px 48px">
-<div style="flex:1 1 480px;min-width:0;background:rgba(242,235,221,0.82);backdrop-filter:blur(16px);-webkit-backdrop-filter:blur(16px);border:1px solid rgba(255,255,255,0.55);border-radius:8px;padding:48px 44px;display:flex;flex-direction:column;gap:24px">
-<div style="font-size:13px;font-weight:700;letter-spacing:0.16em;text-transform:uppercase;color:#6E5A2E">Arquitecto y desarrollador · 25 años de experiencia</div>
-<h1 style="margin:0;font-family:'Fraunces',serif;font-weight:400;font-size:clamp(40px,5vw,70px);line-height:1.02;letter-spacing:-0.02em;text-wrap:balance;color:#1E4C4C">Casas pensadas <em style="color:#A0823F">antes</em> de construirse.</h1>
-<p style="margin:0;color:#3E4B4B;max-width:520px">La mayoría de los problemas de una obra nacen en el plano. Yo los resuelvo ahí, antes de que te cuesten plata. Un solo responsable del primer boceto a la entrega de llaves.</p>
-<div style="display:flex;flex-wrap:wrap;align-items:center;gap:12px 20px">
-<a href="cuestionario.html" style="background:#1E4C4C;color:#F2EBDD;text-decoration:none;font-weight:700;padding:16px 26px;border-radius:999px;min-height:44px;box-sizing:border-box;display:inline-flex;align-items:center;gap:10px">Empezá a pensar tu render en 5 minutos
-<svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 12h14M13 6l6 6-6 6"></path></svg></a>
+<div class="hbg" aria-hidden="true"><img src="las-vizcachas.webp" alt=""></div>
+<div class="hwrap">
+<div class="heb">Arquitecto y desarrollador · 25 años de experiencia</div>
+<h1 class="hh"><span class="hl hl1">Casas pensadas</span><span class="hl hl2"><em>antes</em> de construirse.</span></h1>
+<div class="hbot">
+<p>La mayoría de los problemas de una obra nacen en el plano. Yo los resuelvo ahí, antes de que te cuesten plata. Un solo responsable del primer boceto a la entrega de llaves.</p>
+<a class="hcta" href="cuestionario.html">Empezá a pensar tu render en 5 minutos <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 12h14M13 6l6 6-6 6"></path></svg></a>
 </div>
-</div>
-<div style="flex:0 1 330px;margin:0 auto;position:relative;width:100%;max-width:330px">
-<div style="width:100%;aspect-ratio:9/16;overflow:hidden;border-radius:10px;border:1px solid rgba(255,255,255,0.6);box-shadow:0 18px 50px rgba(31,42,42,0.22);background:#DCD1BC"><img class="kb" src="hero-vizcachas.webp" alt="Casa de campo con pileta, Las Vizcachas" style="width:100%;height:100%;object-fit:cover;display:block"></div>
-<span style="position:absolute;left:12px;bottom:12px;background:rgba(242,235,221,0.80);backdrop-filter:blur(10px);-webkit-backdrop-filter:blur(10px);border:1px solid rgba(255,255,255,0.6);color:#1F2A2A;font-size:11px;font-weight:700;letter-spacing:.1em;text-transform:uppercase;padding:6px 12px;border-radius:999px">Las Vizcachas · Cardales</span>
-</div>
+<span class="hcap">Las Vizcachas · Cardales</span>
 </div>
 <div style="position:relative;background:rgba(30,76,76,0.88);backdrop-filter:blur(10px);-webkit-backdrop-filter:blur(10px)">
 <div style="max-width:1240px;margin:0 auto;padding:16px 32px;display:flex;flex-wrap:wrap;justify-content:space-between;gap:6px 24px;font-size:13px;font-weight:700;letter-spacing:0.2em;color:#F2EBDD">
@@ -400,8 +408,8 @@ els.forEach(function(e,i){var p=e.parentNode,k=[].indexOf.call(p.children,e);e.c
 if(!('IntersectionObserver' in window)||rm){els.forEach(function(e){e.classList.add('in')})}
 else{var io=new IntersectionObserver(function(es){es.forEach(function(e){if(e.isIntersecting){e.target.classList.add('in');io.unobserve(e.target)}})},{threshold:.1,rootMargin:'0px 0px -6% 0px'});els.forEach(function(e){io.observe(e)})}
 /* barra de progreso, header y parallax */
-var sp=document.getElementById('sp'),hd=document.querySelector('header'),bg=document.querySelector('#inicio > img'),cue=document.querySelector('.cue');
-function f(){var y=scrollY,h=document.documentElement.scrollHeight-innerHeight;sp.style.transform='scaleX('+(h>0?y/h:0)+')';hd.classList.toggle('s',y>20);if(cue)cue.style.opacity=y>60?0:1;if(bg&&!rm&&y<innerHeight*1.2)bg.style.transform='translate3d(0,'+(y*.14)+'px,0)'}
+var sp=document.getElementById('sp'),hd=document.querySelector('header'),bg=document.querySelector('#inicio .hbg img'),hl1=document.querySelector('.hl1'),hl2=document.querySelector('.hl2'),hero=document.getElementById('inicio'),cue=document.querySelector('.cue');
+function f(){var y=scrollY,h=document.documentElement.scrollHeight-innerHeight;sp.style.transform='scaleX('+(h>0?y/h:0)+')';hd.classList.toggle('s',y>20);if(cue)cue.style.opacity=y>60?0:1;if(!rm&&y<innerHeight*1.4){if(bg)bg.style.transform='translate3d(0,'+(y*.14)+'px,0)';var p=Math.min(y/(hero.offsetHeight*.85),1),w=innerWidth;if(hl1)hl1.style.transform='translate3d('+(-p*w*.62)+'px,0,0)';if(hl2)hl2.style.transform='translate3d('+(p*w*.62)+'px,0,0)'}}
 f();addEventListener('scroll',f,{passive:true});
 /* link activo en el menú */
 var links=[].slice.call(document.querySelectorAll('header nav div a[href^="#"]'));
