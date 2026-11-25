@@ -264,7 +264,7 @@ function show(i){
   <div><label for="email">Tu mail</label><input id="email" type="email" name="email" autocomplete="email" required placeholder="nombre@mail.com"></div></div>
   <div class="err" id="err" role="alert"></div>
   <div class="sum" id="sum"></div>
-  <label class="check"><input type="checkbox" id="ok"> Acepto que Federico use estas respuestas para armar mi render y contactarme.</label>`;
+  <label class="check"><input type="checkbox" id="ok"> Acepto que Federico use estas respuestas para armar mi render y contactarme. <a href="privacidad.html" target="_blank" rel="noopener">Política de privacidad</a></label>`;
  } else body=s.q.map(q=>`<div class="q"><div class="lbl" id="l_${q.k}">${q.l}</div>${q.hint?`<p class="hint">${q.hint}</p>`:''}${q.h}</div>`).join('')+(i===0?'<div class="err" id="err0">Elegí el tipo de proyecto y qué necesitás hacer.</div>':'');
  f.innerHTML=`<div class="step-n">${steps.map((_,j)=>`<i class="${j<=i?'on':''}"></i>`).join('')}</div>
   <div class="eyebrow">${s.t}</div><h2>${s.h}</h2><p class="lead">${s.l}</p>${body}
