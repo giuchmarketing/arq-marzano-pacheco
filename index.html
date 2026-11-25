@@ -431,4 +431,6 @@ var links=[].slice.call(document.querySelectorAll('header nav div a[href^="#"]')
 if('IntersectionObserver' in window){var so=new IntersectionObserver(function(es){es.forEach(function(e){if(e.isIntersecting){links.forEach(function(a){a.classList.toggle('act',a.getAttribute('href')==='#'+e.target.id)})}})},{rootMargin:'-45% 0px -50% 0px'});
  links.forEach(function(a){var t=document.querySelector(a.getAttribute('href'));if(t)so.observe(t)})}
 })();
-</script></body></html>
+</script><script>/* medición: eventos para Google Tag Manager (no hacen nada si GTM no está instalado) */
+document.addEventListener("click",function(e){var a=e.target.closest&&e.target.closest('a[href*="wa.me"]');if(!a)return;(window.dataLayer=window.dataLayer||[]).push({event:"whatsapp_click",link_url:a.href,link_location:(a.closest("section[id],footer,header")||{}).id||(a.closest("footer")?"footer":"flotante")})},true);</script>
+</body></html>

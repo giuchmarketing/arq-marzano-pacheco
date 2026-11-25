@@ -297,6 +297,7 @@ function send(){collect();
  <p class="lead">Se abrió WhatsApp con tus respuestas. Mandá el mensaje y Federico te responde con tu render conceptual.</p>
  <div class="nav"><a class="btn p" href="${url}" target="_blank" rel="noopener">Abrir WhatsApp de nuevo</a><a class="btn s" href="index.html">Volver al inicio</a></div>`;
  document.getElementById('pbar').style.width='100%';
+ (window.dataLayer=window.dataLayer||[]).push({event:'generate_lead',lead_type:'cuestionario_render'});
  window.open(url,'_blank');
 }
 f.addEventListener('submit',e=>e.preventDefault());
